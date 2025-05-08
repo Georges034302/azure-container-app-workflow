@@ -1,21 +1,36 @@
 ## 🚀 Node.js App on Azure Container Apps with CI/CD
 
 This project shows how to deploy a simple Node.js web app to Azure Container Apps with GitHub Actions CI/CD.
+---
 
+### 📁 Project Structure
+
+```
+azure-container-app-workflow/
+├── .github/
+│   └── workflows/
+│       └── deploy.yml              
+├── Dockerfile                      
+├── index.js                       
+├── package.json                    
+├── setup.sh                       
+└── README.md
+```
+---
 ### 📦 Features
 
 - Simple Node.js HTTP server
 - Dockerized with `Dockerfile`
 - Azure setup with `setup.sh`
 - GitHub Actions CI/CD (`.github/workflows/deploy.yml`)
-
+---
 ### ✅ Prerequisites
 
 - Azure CLI installed and logged in
 - Docker installed
 - GitHub repo initialized with this code
 - Permissions to add GitHub secrets
-
+---
 ### 🛠️ Step 1: Run Azure Setup Script
 
 ```bash
@@ -54,13 +69,13 @@ az containerapp show \
 ```bash
 🌐FQDN: <app-name>.<unique-id>.<region>.azurecontainerapps.io
 ```
-
+---
 ### 🧹 Cleanup
 
 ```bash
 az group delete --name my-rg --yes --no-wait
 ```
-
+---
 ## 📝 License
 
 MIT
