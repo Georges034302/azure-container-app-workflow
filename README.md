@@ -50,6 +50,10 @@ az containerapp show \
   --query properties.configuration.ingress.fqdn \
   -o tsv
 ```
+👉 This command returns the FQDN (Fully Qualified Domain Name) in the following format:
+```bash
+🌐FQDN: <app-name>.<unique-id>.<region>.azurecontainerapps.io
+```
 
 ### 🧹 Cleanup
 
