@@ -63,11 +63,32 @@ git commit -m "Initial commit"
 git push origin main
 ```
 
+* 🤖 What Happens Next? (GitHub Actions CI/CD Explained)
+
+After you push your code, GitHub Actions automatically triggers the workflow defined in `.github/workflows/deploy.yml`.  
+This workflow will:
+
+- **Build your Docker image** using the `Dockerfile` in your repo.
+- **Push the image to Azure Container Registry** (or another registry, as configured).
+- **Deploy the image to Azure Container Apps** using the Azure CLI.
+- **Update the running app** with the new image version.
+- **Report status** back to your GitHub repository (success/failure).
+
+You can monitor the workflow progress under the **Actions** tab in your GitHub repository.
+
 ---
 
 ### 🌐 Step 3: Access the App
 
-After deployment, retrieve your app's public URL with:
+After deployment, the `.github/scripts/az-deploy.sh` script will automatically fetch and display your app's public URL (FQDN) for you.
+
+You should see output similar to:
+
+```bash
+🌐FQDN: <app-name>.<unique-id>.<region>.azurecontainerapps.io
+```
+
+If you need to retrieve the FQDN again later, you can run:
 
 ```bash
 az containerapp show \
@@ -75,11 +96,6 @@ az containerapp show \
   --resource-group my-rg \
   --query properties.configuration.ingress.fqdn \
   -o tsv
-```
-
-👉 This command returns the FQDN (Fully Qualified Domain Name) in the following format:
-```bash
-🌐FQDN: <app-name>.<unique-id>.<region>.azurecontainerapps.io
 ```
 ---
 
