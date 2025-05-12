@@ -25,7 +25,7 @@ az containerapp env create \
   --resource-group "$RESOURCE_GROUP" \
   --location "$LOCATION"
 
-echo "🚀 Creating initial Container App (placeholder image)..."
+echo "🚀 Creating initial Container App (public placeholder image)..."
 az containerapp create \
   --name "$APP_NAME" \
   --resource-group "$RESOURCE_GROUP" \
@@ -56,7 +56,6 @@ gh secret set AZURE_CONTAINER_REGISTRY_NAME --repo "$REPO" -b"$ACR_NAME"
 gh secret set AZURE_CONTAINERAPP_NAME --repo "$REPO" -b"$APP_NAME"
 gh secret set AZURE_CONTAINERAPPS_ENVIRONMENT --repo "$REPO" -b"$ENV_NAME"
 
-# Assign AcrPull role to the Container App's managed identity
 echo ""
 echo "🔑 Assigning AcrPull role to the Container App's managed identity..."
 PRINCIPAL_ID=$(az containerapp show \
