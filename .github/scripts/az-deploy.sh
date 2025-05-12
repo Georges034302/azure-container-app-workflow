@@ -56,6 +56,27 @@ gh secret set AZURE_CONTAINER_REGISTRY_NAME --repo "$REPO" -b"$ACR_NAME"
 gh secret set AZURE_CONTAINERAPP_NAME --repo "$REPO" -b"$APP_NAME"
 gh secret set AZURE_CONTAINERAPPS_ENVIRONMENT --repo "$REPO" -b"$ENV_NAME"
 
+# Assign AcrPull role to the Container App's managed identity
+echo ""
+echo "🔑 Assigning AcrPull role to the Container App's managed identity..."
+PRINCIPAL_ID=$(az containerapp show \
+  --name "$APP_NAME" \
+  --resource-group "$RESOURCE_GROUP" \
+  --query identity.principalId \
+  -o tsv)
+
+ACR_ID=$(az acr show --name "$ACR_NAME" --resource-group "$RESOURCE_GROUP" --query id -o tsv)
+
+if [[ -n "$PRINCIPAL_ID" && -n "$ACR_ID" ]]; then
+  az role assignment create \
+    --assignee "$PRINCIPAL_ID" \
+    --role "AcrPull" \
+    --scope "$ACR_ID"
+  echo "✅ AcrPull role assigned."
+else
+  echo "⚠️  Could not assign AcrPull role (missing principal ID or ACR ID)."
+fi
+
 echo ""
 echo "✅ Setup complete and secrets added to GitHub repository: $REPO"
 
