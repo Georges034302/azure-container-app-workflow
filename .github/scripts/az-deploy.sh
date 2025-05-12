@@ -52,6 +52,7 @@ REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
 gh secret set AZURE_CREDENTIALS --repo "$REPO" < gha-creds.json
 gh secret set AZURE_RESOURCE_GROUP --repo "$REPO" -b"$RESOURCE_GROUP"
 gh secret set AZURE_CONTAINER_REGISTRY --repo "$REPO" -b"$ACR_NAME.azurecr.io"
+gh secret set AZURE_CONTAINER_REGISTRY_NAME --repo "$REPO" -b"$ACR_NAME"
 gh secret set AZURE_CONTAINERAPP_NAME --repo "$REPO" -b"$APP_NAME"
 gh secret set AZURE_CONTAINERAPPS_ENVIRONMENT --repo "$REPO" -b"$ENV_NAME"
 

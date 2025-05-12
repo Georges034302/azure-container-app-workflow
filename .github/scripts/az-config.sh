@@ -13,8 +13,12 @@ else
   echo "✅ Azure CLI already installed."
 fi
 
-echo "🔑 Logging in to Azure using device code..."
-az login --use-device-code
+if ! az account show &> /dev/null; then
+  echo "🔑 Logging in to Azure using device code..."
+  az login --use-device-code
+else
+  echo "✅ Already logged in to Azure CLI."
+fi
 
 echo "📋 Fetching Azure subscription list and setting the first one as default..."
 FIRST_SUBSCRIPTION_ID=$(az account list --query '[0].id' -o tsv)
