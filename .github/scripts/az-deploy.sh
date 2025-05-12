@@ -4,7 +4,14 @@ set -e
 
 # Source configuration and export variables
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+echo "📦 Sourcing Azure CLI and environment configuration..."
 source "$SCRIPT_DIR/az-config.sh"
+echo "✅ Finished az-config.sh"
+
+echo "🔑 Sourcing GitHub CLI authentication and configuration..."
+source "$SCRIPT_DIR/gh-config.sh"
+echo "✅ Finished gh-config.sh"
 
 echo "🔧 Creating resource group..."
 az group create --name "$RESOURCE_GROUP" --location "$LOCATION"
@@ -30,7 +37,7 @@ az containerapp create \
 
 echo "🔐 Creating GitHub Actions deployment credentials (Service Principal)..."
 az ad sp create-for-rbac --name gha-deployer --role contributor \
-  --scopes /subscriptions/$(az account show --query id -o tsv)/resourceGroups/"$RESOURCE_GROUP" \
+  --scopes /subscriptions/$SUBSCRIPTION_ID/resourceGroups/"$RESOURCE_GROUP" \
   --sdk-auth > gha-creds.json
 
 echo "🔐 Adding secrets to GitHub repository using GitHub CLI..."
@@ -50,3 +57,17 @@ gh secret set AZURE_CONTAINERAPPS_ENVIRONMENT --repo "$REPO" -b"$ENV_NAME"
 
 echo ""
 echo "✅ Setup complete and secrets added to GitHub repository: $REPO"
+
+echo ""
+echo "🌐 Fetching the public URL (FQDN) of your Azure Container App..."
+APP_FQDN=$(az containerapp show \
+  --name "$APP_NAME" \
+  --resource-group "$RESOURCE_GROUP" \
+  --query properties.configuration.ingress.fqdn \
+  -o tsv)
+
+if [[ -n "$APP_FQDN" ]]; then
+  echo "🌐 Your app is available at: https://$APP_FQDN"
+else
+  echo "⚠️  Could not retrieve the FQDN for your container app."
+fi

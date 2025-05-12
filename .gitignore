@@ -1,0 +1,2 @@
+# Ignore Azure service principal credentials
+gha-creds.json
